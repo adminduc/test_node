@@ -9,8 +9,9 @@ import authRouter from "./routes/auth";
 const app = express();
 dotenv.config();
 
+const { PORT, MONGO_URI } = process.env;
 // Khởi tạo kết nối với cơ sở dữ liệu
-connectDB(process.env.MONGO_URI);
+connectDB(MONGO_URI);
 
 app.use(express.json());
 app.use(morgan("tiny"));
@@ -18,8 +19,6 @@ app.use(morgan("tiny"));
 app.use("/api", productRouter);
 app.use("/api", authRouter);
 
-app.listen(process.env.PORT, (req, res) =>
-  console.log("Listening on port " + process.env.PORT)
-);
+app.listen(PORT, (req, res) => console.log("Listening on port " + PORT));
 
 export const viteNodeApp = app;
