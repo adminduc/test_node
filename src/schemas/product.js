@@ -1,25 +1,31 @@
-import * as yup from "yup";
+import Joi from "joi";
 
-export const productSchema = yup.object().shape({
-    name: yup.string().required(),
-    price: yup.number().required().min(0),
-    description: yup.string(),
-    categoryId: yup.string().required(),
-    createdAt: yup.date().default(() => new Date()),
-    updatedAt: yup.date().default(() => new Date()),
-    deletedAt: yup.date().default(null),
-    deleted: yup.boolean().default(false),
+const productSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "string.empty": "Tên sản phẩm không được bỏ trống",
+    "any.required": "Tên sản phẩm là trường bắt buộc",
+  }),
+  price: Joi.number().required().messages({
+    "number.empty": "Giá sản phẩm không được bỏ trống",
+    "number.base": "Giá sản phẩm phải là số",
+    "any.required": "Giá sản phẩm là trường bắt buộc",
+  }),
+  quantity: Joi.number().required().messages({
+    "number.empty": "Số lượng sản phẩm không được bỏ trống",
+    "number.base": "Số lượng sản phẩm phải là số",
+    "any.required": "Số lượng sản phẩm là trường bắt buộc",
+  }),
+  description: Joi.any(),
+  image: Joi.array().required().messages({
+    "string.empty": "Hình ảnh không được bỏ trống",
+    "any.required": "Hình ảnh là trường bắt buộc",
+  }),
+  note: Joi.any(),
+  size: Joi.any(),
+  status: Joi.any(),
+  categoryId: Joi.string().required().messages({
+    "string.empty": "Danh mục sản phẩm không được bỏ trống",
+    "any.required": "Danh mục sản phẩm là trường bắt buộc",
+  }),
 });
-
-export const categoryProductSchema = yup.object().shape({
-    name: yup.string().trim().required(),
-    description: yup.string().required(),
-    products: yup.array().of(
-        yup
-            .string()
-            // regular expression để validate ObjectId.
-            //
-            .matches(/^[0-9a-fA-F]{24}$/)
-            .required()
-    ),
-});
+export default productSchema;

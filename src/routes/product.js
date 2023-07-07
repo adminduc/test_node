@@ -1,19 +1,25 @@
 import express from "express";
-import { add, get, remove, restore, update } from "../controllers/product";
-import { checkPermission } from "../middlewares/checkAuth";
+import {
+  create,
+  get,
+  getAll,
+  remove,
+  update,
+  search,
+  updateFollowCategoryId,
+  getAllStatus,
+} from "../controllers/product";
+import checkPermission from "../middlewares/checkPermission";
 
 const router = express.Router();
 
-router.route("/products").get((req, res) => {
-  return res.status(200).json({
-    message: "List Products",
-  });
-});
-router.route("/products/:id").get(get).post(add);
-router
-  .route("/products/:id", checkPermission)
-  .patch(restore)
-  .put(update)
-  .delete(remove);
+router.get("/", checkPermission, getAll);
+router.get("/status", getAllStatus);
+router.get("/:id", get);
+router.get("/search/:key", search);
+router.post("", checkPermission, create);
+router.post("/updateFollowCateId", checkPermission, updateFollowCategoryId);
+router.patch("/:id", checkPermission, update);
+router.delete("/:id", checkPermission, remove);
 
 export default router;
